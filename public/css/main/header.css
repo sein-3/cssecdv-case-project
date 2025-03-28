@@ -1,0 +1,282 @@
+:root {
+    --search-icon: url("/images/icons/search-icon.png");
+    --favourite-icon: url("/images/icons/favourite-icon.png");
+    --cart-icon: url("/images/icons/cart-icon.png");
+    --profile-icon: url("/images/icons/profile-icon.png");
+    --search-hover-icon: url("/images/icons/search-icon-hover.png");
+    --favourite-hover-icon: url("/images/icons/favourite-icon-hover.png");
+    --cart-hover-icon: url("/images/icons/cart-icon-hover.png");
+    --profile-hover-icon: url("/images/icons/profile-icon-hover.png");
+}
+
+.link-unstyled {
+    text-decoration: none;
+    color: inherit;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+/* For some reason, the scrollbar is transparent so I just added this*/
+body::-webkit-scrollbar {
+    width: 0.5rem;
+}
+
+/***********************************************
+                     HEADER                    
+***********************************************/
+div.header {
+    width: 100%;
+    height: 6.25rem;
+    display: block;
+    position: sticky;
+    background-color: white;
+    border-bottom: 1px solid #cacaca;
+    user-select: none;
+    top: 0;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+    z-index: 1;
+}
+
+div.header-box {
+    position: relative;
+    top: 15%;
+}
+
+span.admin-label {
+    color: black;
+    font-weight: bold;
+    font-size: 1em;
+    position: relative;
+    top: 0.5rem;
+}
+
+/***********************************************
+                     LOGO                    
+***********************************************/
+div.logo {
+    text-align: center;
+    justify-content: center;
+    position: relative;
+    float: center;
+    width: 9.375rem;
+    margin: 0 auto;
+}
+
+.kaia {
+    color: #ef91cf;
+    font-family: "Migra-ExtraBold", sans-serif;
+    font-size: 3em;
+    margin: 0px;
+    padding: 0px;
+}
+
+.apparel {
+    color: #995594;
+    font-family: "GlacialIndifference-Bold", sans-serif;
+    font-size: 0.9em;
+    font-weight: bold;
+    margin: -12px;
+    padding: 0px;
+    letter-spacing: 5.5px;
+}
+
+.last-letter {
+    letter-spacing: 0px;
+}
+
+/***********************************************
+                    BUTTONS                    
+***********************************************/
+div.header-buttons {
+    gap: 0.938rem;
+    display: flex;
+    flex-direction: row;
+    position: absolute;
+    top: 1.6rem;
+    right: 50px;
+}
+
+
+button.header {
+    background-color: transparent;
+    border: none;
+    border-radius: 5px;
+}
+
+span.icon {
+    height: 35px;
+    width: 35px;
+    display: block;
+    background-size: cover;
+    cursor: pointer;
+}
+
+/***********************************************
+                    POP-UPS               
+***********************************************/
+.popup {
+    display: flex;
+    position: absolute;
+    top: 55%;
+    padding: 5px;
+    visibility: hidden;
+    z-index: 999;
+    background-color: white;
+    border: 1px solid #e0e0e0;
+    margin-top: 1rem;
+}
+
+/***********************************************
+                SEARCH POP-UP               
+***********************************************/
+.popup.search-popup {
+    right: 12.8rem;
+    display: block;
+    width: auto;
+    font-size: 1em;
+}
+
+/***********************************************
+                FAVOURITE POP-UP               
+***********************************************/
+.popup.favourite-popup {
+    right: 9.5rem;
+    display: block;
+    width: auto;
+    font-size: 1em;
+}
+
+/***********************************************
+                 CART POP-UP               
+***********************************************/
+.popup.cart-popup {
+    right: 6.35rem;
+    display: block;
+    width: auto;
+    font-size: 0.95em;
+}
+
+/***********************************************
+                 PROFILE POP-UP             
+***********************************************/
+.popup.profile-popup {
+    right: 3rem;
+    display: block;
+    width: auto;
+    font-size: 0.95em;
+    padding: 0;
+}
+
+#user-label-container {
+    background-color: #ef91cf;
+    margin-bottom: 0.125rem;
+    padding: 0.3125rem;
+}
+
+.popup.profile-popup #user-label {
+    color: white;
+    font-size: 0.95em;
+}
+
+.popup.profile-popup button {
+    display: block;
+    width: 100%;
+    border: none;
+    padding: 0.3125rem;
+    padding-right: 0.625rem;
+    background-color: transparent;
+    text-align: left;
+    text-indent: 0.3125rem;
+    font-family: inherit;
+    font-size: 0.95em;
+    cursor: pointer;
+}
+
+.popup.profile-popup button:hover {
+    background-color: #ef91cf;
+    color: white;
+    font-style: bold;
+}
+
+.popup.profile-popup button:active {
+    opacity: 0.8;
+    transition: 0.3s;
+}
+
+.popup.profile-popup button:not(:hover) {
+    transition: 0.05s;
+}
+
+/***********************************************
+                  ICON IMAGES                
+***********************************************/
+span.icon.search {
+    background-image: var(--search-icon);
+}
+
+span.icon.favourite {
+    background-image: var(--favourite-icon);
+}
+
+span.icon.cart {
+    background-image: var(--cart-icon);
+}
+
+span.icon.profile {
+    background-image: var(--profile-icon);
+}
+
+span.icon.search:hover {
+    background-image: var(--search-hover-icon);
+}
+
+span.icon.favourite:hover {
+    background-image: var(--favourite-hover-icon);
+}
+
+span.icon.cart:hover {
+    background-image: var(--cart-hover-icon);
+}
+
+span.icon.profile:hover {
+    background-image: var(--profile-hover-icon);
+}
+
+/***********************************************
+            SEARCH BOX POP-UP HOVERED
+***********************************************/
+div.search-box {
+    display: flex;
+    justify-content: flex-end;
+    width: 2.3rem;
+    transition: 1s ease-in-out;
+    -webkit-transition: 1s ease-in-out;
+    -moz-transition: 1s ease-in-out;
+    -ms-transition: 1s ease-in-out;
+    -o-transition: 1s ease-in-out;
+    overflow: hidden;
+}
+
+#search-item {
+    width: 19.688rem;
+    outline: none;
+    border: none;
+    border: 1px solid #995594;
+    background-color: #FFEEF9;
+    text-indent: 10px;
+}
+
+div.search-box.active {
+    display: flex;
+    justify-content: flex-end;
+    width: 21.875rem;
+    background-color: #995594;
+    transition: 1s ease-in-out;
+    -webkit-transition: 1s ease-in-out;
+    -moz-transition: 1s ease-in-out;
+    -ms-transition: 1s ease-in-out;
+    -o-transition: 1s ease-in-out;
+}

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+    <title> Login Page </title>
+    <meta name = "viewport" content= "width=device-width, initial-scale=1.0">
+    <link rel = "stylesheet" href = "/css/users/login.css">
+    <link rel = "stylesheet" href = "/css/main/font.css">
+    <script src = "js/users/login.js" defer> </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>  
+    <%- include("../main/header.ejs") %>
+    <div class = "main-container" id = "main-container">
+        <div class = "switch-container">
+            <div class = "switch-container-button login focus">Log in</div>
+            <div class = "switch-container-button register">Create account</div>
+        </div>
+
+        <div class = "error-box" id = "error-box"> 
+        </div>
+        <div class = "content-container">
+            <form id = "register-form-container">
+                <div class = "input-container-register">
+                    <div class = "input-box name">
+                            <input type = "text" id = "register-first-name" placeholder = "First Name" required>
+                            <input type = "text" id = "register-last-name" placeholder = "Last Name" required>
+                    </div>
+                    <div class = "input-box username">
+                        <input type = "text" id = "register-username" name = "register-username" placeholder = "Username" required >
+                    </div>
+                    <div class = "input-box email">
+                        <input type = "email" id = "register-email" placeholder = "Email" required>
+                    </div>
+                    <div class = "input-box password">
+                        <input type = "password" id = "register-password" placeholder = "Password" required>
+                        <i class="fa-solid fa-eye show-password" id="toggle-register" style="color: #969696;"></i>
+                    </div>
+                </div>
+                <button type="submit" id = "register-button"> Create account</button>
+            </form>
+            <form id = "login-form-container">
+                <div class = "input-container">
+                    <div class = "input-box email">
+                        <input type = "email" id = "login-email" name = "login-email" placeholder = "Email" required >
+                    </div>
+                    <div class = "input-box password">
+                            <input type = "password" id = "login-password" name = "login-password" placeholder = "Password" required>
+                            <i class="fa-solid fa-eye show-password" id="toggle-login" style="color: #969696;"></i>
+                    </div>
+                </div>
+                <div class = "options-container">
+                    <div class="option-items">
+                        <input type="checkbox" id="remember-me" name="remember-me">
+                        <label for="remember-me">Remember Me</label>
+                    </div>
+                    <a href=""><span class="option-items">Forgot Password?</span></a>
+                </div>
+                <div class = "terms-container">
+                    By logging into my account, I agree to Kaia Apparel’s <a href="/">Term’s and condition</a> and <a href="/">Privacy policy</a>.
+                </div>
+                <button type = "submit" id = "login-button">Login</button>
+            </form>
+        </div>
+    </div>
+    <%- include("../main/footer.ejs") %>
+</body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+    <title> Kaia Apparel </title>
+    <meta name = "viewport" content= "width=device-width, initial-scale=1.0">
+    <link rel = "stylesheet" href = "/css/main/font.css">
+    <link rel = "stylesheet" href = "/css/users/wishlist.css">
+    <script src = "/js/users/wishlist.js" defer> </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <%- include("../main/header.ejs") %>
+    <div class = "main-container"> 
+        <div class = "path-container">
+            <span> <a href = "homepage" id = "home"> Home</a> / 
+                <span class = "path-category" id = "path-category"> </span> 
+                <a> WISHLIST </a>
+            </span>
+        </div>
+        <div class = "error-box" id = "wishlist-feedback-box"> </div> 
+        <div class = "category-header-title">
+            <span class = "category-title" id = "category-title"> WISHLIST </span>
+            <span id = "wishlist-items"> </span>
+        </div>
+        <div id = "product-containers">
+        </div>
+    </div>
+    <%- include("../main/footer.ejs") %>
+</body>
+<script>
+    const wishlist = `<%- JSON.stringify(wishlist) %>`;
+    console.log(wishlist);
+</script>
+</html>
