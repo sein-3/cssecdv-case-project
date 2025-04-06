@@ -44,12 +44,22 @@ const loginPassword = document.getElementById("login-password");
 const loginButton = document.getElementById("login-button");
 const rememberBox = document.getElementById("remember-me");
 
+let emailReg =  /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
 rememberBox.addEventListener('change', function() {
     if( this.checked ) {
         this.value = true;
     } else {
         this.value = false;
     }   
+});
+
+loginEmail.addEventListener('input', function() {
+       if (emailReg.test(loginEmail.value)) {
+        loginEmail.classList.remove('invalid');
+    } else {
+        loginEmail.classList.add('invalid');
+    }
 });
 
 function togglePasswordVisibility( id ) {
@@ -92,6 +102,12 @@ loginButton?.addEventListener( "click", async function(e) {
             errorBox.textContent = 'Missing email or password';
             return false;
         }
+        
+        if( loginEmail.classList.contains("invalid") ) {
+            errorBox.style.display = 'block';
+            errorBox.textContent = 'Invalid Email';
+            return false;
+        }
 
         const response = await fetch( '/login', {
             method: 'POST',
@@ -101,6 +117,9 @@ loginButton?.addEventListener( "click", async function(e) {
 
         // - On success, go to dashboard
         if( response.status == 201 ) {
+            const data = await response.json();
+            alert("Your last login was at " + data.lastLogin + "!" );
+
             window.location.href = "/homepage";
         } else if( response.status == 200 ) {
             window.location.href = "/admin";
@@ -110,6 +129,9 @@ loginButton?.addEventListener( "click", async function(e) {
             switch( response.status ) {
                 case 401: {
                     errorBox.textContent = 'Invalid credentials';
+                } break;
+                case 402: {
+                    errorBox.textContent = 'Account is locked';
                 } break;
                 default: {
                     errorBox.textContent = 'Internal server error';
@@ -133,7 +155,100 @@ const registerLastName = document.getElementById("register-last-name");
 const registerUsername = document.getElementById("register-username");
 const registerEmail = document.getElementById("register-email");
 const registerPassword = document.getElementById("register-password");
+const registerQuestion1 = document.getElementById("question1");
+const registerQuestion2 = document.getElementById("question2");
+const registerAnswer1 = document.getElementById("register-answer1");
+const registerAnswer2 = document.getElementById("register-answer2");
 const registerButton = document.getElementById("register-button");
+
+let alphaNumericReg = /^\w+$/;
+let alphabeticReg = /^[A-Za-z]+$/;
+let passwordReg = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+
+registerFirstName.addEventListener('input', function() {
+    if (alphabeticReg.test(registerFirstName.value)) {
+        registerFirstName.classList.remove('invalid');
+    } else {
+        registerFirstName.classList.add('invalid');
+    }
+});
+
+registerLastName.addEventListener('input', function() {
+    if (alphabeticReg.test(registerLastName.value)) {
+        registerLastName.classList.remove('invalid');
+    } else {
+        registerLastName.classList.add('invalid');
+    }
+});
+
+registerUsername.addEventListener('input', function() {
+    if (alphaNumericReg.test(registerUsername.value)) {
+        registerUsername.classList.remove('invalid');
+    } else {
+        registerUsername.classList.add('invalid');
+    }
+});
+
+registerEmail.addEventListener('input', function() {
+    if (emailReg.test(registerEmail.value)) {
+        registerEmail.classList.remove('invalid');
+    } else {
+        registerEmail.classList.add('invalid');
+    }
+});
+
+registerPassword.addEventListener('input', function() {
+    if (passwordReg.test(registerPassword.value)) {
+        registerPassword.classList.remove('invalid');
+    } else {
+        registerPassword.classList.add('invalid');
+    }
+});
+
+registerAnswer1.addEventListener('input', function() {
+    if (alphabeticReg.test(registerAnswer1.value)) {
+        registerAnswer1.classList.remove('invalid');
+    } else {
+        registerAnswer1.classList.add('invalid');
+    }
+});
+
+registerAnswer2.addEventListener('input', function() {
+    if (alphabeticReg.test(registerAnswer2.value)) {
+        registerAnswer2.classList.remove('invalid');
+    } else {
+        registerAnswer2.classList.add('invalid');
+    }
+});
+
+
+function updateDropdown() {
+    for (let option of registerQuestion1.options) {
+        option.disabled = false;
+    }
+    for (let option of registerQuestion2.options) {
+        option.disabled = false;
+    }
+
+    if (registerQuestion1.value) {
+        for (let option of registerQuestion2.options) {
+            if (option.value === registerQuestion1.value) {
+                option.disabled = true;
+            }
+        }
+    }
+
+    if (registerQuestion2.value) {
+        for (let option of registerQuestion1.options) {
+            if (option.value === registerQuestion2.value) {
+                option.disabled = true;
+            }
+        }
+    }
+}
+
+registerQuestion1.addEventListener('change', updateDropdown);
+registerQuestion2.addEventListener('change', updateDropdown);
 
 /** 
     ` Attaches a `click` event to `#register-button`. The code communicates
@@ -157,12 +272,66 @@ registerButton?.addEventListener( "click", async function(e) {
             },
             username: registerUsername.value,
             email: registerEmail.value, 
-            password: registerPassword.value
+            password: registerPassword.value,
+            question1: registerQuestion1.value,
+            answer1: registerAnswer1.value,
+            question2: registerQuestion2.value,
+            answer2: registerAnswer2.value
         }
 
         if( !areInputFieldsFilled("register-form-container") ) {
             errorBox.style.display = 'block';
             errorBox.textContent = 'Some input fields are missing';
+            return false;
+        }
+
+        if( registerFirstName.classList.contains("invalid") ) {
+            errorBox.style.display = 'block';
+            errorBox.textContent = 'First Name Must Be Letters Only';
+            return false;
+        }
+        if( registerLastName.classList.contains("invalid") ) {
+            errorBox.style.display = 'block';
+            errorBox.textContent = 'Last Name Must Be Letters Only';
+            return false;
+        }
+        if( registerUsername.classList.contains("invalid") ) {
+            errorBox.style.display = 'block';
+            errorBox.textContent = 'Username Must Be Alphanumeric';
+            return false;
+        }
+        if( registerEmail.classList.contains("invalid") ) {
+            errorBox.style.display = 'block';
+            errorBox.textContent = 'Invalid Email';
+            return false;
+        }
+        if( registerPassword.classList.contains("invalid") ) {
+            errorBox.style.display = 'block';
+            errorBox.textContent = 'Invalid Password';
+            return false;
+        }
+
+        if( registerQuestion1.value === "" ) {
+            errorBox.style.display = 'block';
+            errorBox.textContent = 'First Security Question Is Unselected';
+            return false;
+        }
+
+        if( registerQuestion2.value === "" ) {
+            errorBox.style.display = 'block';
+            errorBox.textContent = 'Second Security Question Is Unselected';
+            return false;
+        }
+
+        if( registerAnswer1.classList.contains("invalid") ) {
+            errorBox.style.display = 'block';
+            errorBox.textContent = 'Answer to First Security Question Must Be in Letters Only';
+            return false;
+        }
+
+        if( registerAnswer2.classList.contains("invalid") ) {
+            errorBox.style.display = 'block';
+            errorBox.textContent = 'Answer to Second Security Question Must Be in Letters Only';
             return false;
         }
 

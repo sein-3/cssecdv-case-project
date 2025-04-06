@@ -90,15 +90,16 @@ const UserController = {
             const { email, password, rememberMe } = req.body;
             const login = await User.login( email, password );
 
-            if( login.status !== 200 ) {
+            if( login.status == 401 || login.status == 404) {
                 return res.status(401).json({ message: 'Invalid credentials' });
             } 
+            else if ( login.status == 402 ) {
+                return res.status(402).json({ message: "Account is locked" })
+            }
 
             // - Perform queries
             const {userID} = await User.getUserID(email);
             const {highestRole} = await User.getHighestRole(email);
-
-            console.log( "login", login );
 
             req.session.rememberMe = rememberMe === 'true';
             req.session.authorized = true;
@@ -110,9 +111,9 @@ const UserController = {
             const username = req.session.username;
 
             if( req.session.userRole == 'admin' ) {
-                return res.status(200).json({ message: "Admin login successful.", role: 'admin', username: username });
+                return res.status(200).json({ message: "Admin login successful.", role: 'admin', username: username , lastLogin: login.lastLogin });
             } else {
-                return res.status(201).json({ message: "User login successful.", role: 'customer', username: username });
+                return res.status(201).json({ message: "User login successful.", role: 'customer', username: username, lastLogin: login.lastLogin });
             }   
         } catch( error ) {
             console.error(error); 
@@ -130,6 +131,10 @@ const UserController = {
         }
     },
 
+    passwordReset: (req, res) => {
+        res.render('users/passwordReset.ejs');
+    }, 
+
     /**
         ` This function should execute when the user sends a POST request to path '/register',
         which occurs when the register button is pressed in the registration page. It assumes
@@ -141,7 +146,7 @@ const UserController = {
     */
     register: async (req, res) => {   
         try {
-            const { name, username, email, password } = req.body;
+            const { name, username, email, password, question1, answer1, question2, answer2 } = req.body;
             const isEmailRegistered = await User.doesEmailExist( email );
             const isUsernameRegistered = await User.doesUsernameExist( username );
 
@@ -152,7 +157,7 @@ const UserController = {
                 console.log( "The email: \"" + username + "\" is already registered" );
                 return res.status(400).json({ message: "This username is already registered." });
             }
-            User.register( name.firstName, name.lastName, username, email, password );
+            User.register( name.firstName, name.lastName, username, email, password, question1, answer1, question2, answer2 );
             return res.status(201).json({ message: "Registration successful." });
         } catch( error ) {
             console.error( "Error registering user: ", error );
@@ -418,6 +423,98 @@ const UserController = {
             res.status(500).json({ message: "Internal server error." });
         }
     },
+
+    userCheck: async (req, res) => {        
+        try {
+            const { email } = req.body;
+            const exists = await User.doesEmailExist( email );
+
+            if( exists )
+            {
+                const { status, message } = await User.checkPasswordTime( email );
+                
+                if (status === 201)
+                {
+                    return res.status(201).json({ message: "User Can Change Password" });
+                }
+
+                return res.status(402).json({ message: "User Cannot Change Password" });
+            }
+            else
+            {
+                return res.status(401).json({ message: 'Cannot find email' });
+            }
+        } catch( error ) {
+            console.error(error); 
+            return res.status(500).json({ message: 'An error occurred during looking for user. Please try again.' });
+        }
+    },
+
+    securityQuestion: async (req, res) => {        
+        try {
+            const { email } = req.body;
+            const { status, question1, question2 } = await User.getSecurityQuestions( email );
+
+            if (status === 201)
+            {
+                return res.status(201).json({ message: "Successfully found security questions.", question1: question1, question2: question2 });
+            }
+
+            return res.status(500).json({ message: 'Internal Server Error' });
+        } catch( error ) {
+            console.error(error); 
+            return res.status(500).json({ message: 'Internal Server Error' });
+        }
+    },
+
+    compareAnswers: async (req, res) => {
+        try {
+            const { email, answer1, answer2 } = req.body;
+            const { status } = await User.compareAnswers( email, answer1, answer2 );
+
+            if ( status === 201 )
+            {
+                return res.status(201).json({ message: "Answers are correct." });
+            }
+            else if ( status === 401 )
+            {
+                return res.status(401).json({ message: "Answers are not correct." });
+            }
+
+            return res.status(500).json({ message: "Internal Server Error" });
+            
+        } catch( error ) {
+            console.error(error); 
+            return res.status(500).json({ message: 'Internal Server Error' });
+        }
+    },
+
+    postPasswordReset: async (req, res) => {        
+        try {
+            const { email, password } = req.body;
+            const { status } = await User.passwordReset( email, password );
+
+            if ( status === 201 )
+            {
+                return res.status(201).json({ message: "Password Changed Successfully." });
+            }
+            else if (status === 401)
+            {
+                return res.status(401).json({ message: "Password Is Same As Current" });
+            }
+            else if (status === 402)
+            {
+                return res.status(402).json({ message: "This Password Has Been Used Before" });
+            }
+
+            return res.status(500).json({ message: "Internal Server Error" });
+            
+        } catch( error ) {
+            console.error(error); 
+            return res.status(500).json({ message: 'Internal Server Error' });
+        }
+    },
+
 }
 
 module.exports = UserController;

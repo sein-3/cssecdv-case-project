@@ -9,7 +9,23 @@ CREATE TABLE IF NOT EXISTS users (
     username VARCHAR(50) NOT NULL UNIQUE,
     email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
-    dateCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    dateCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    lastLogin TIMESTAMP,
+    failedAttempts INT DEFAULT 0,
+    lockedTill TIMESTAMP,
+    question1 INT NOT NULL,
+    question2 INT NOT NULL,
+    answer1 VARCHAR(25) NOT NULL,
+    answer2 VARCHAR(25) NOT NULL,
+    CONSTRAINT ques1 CHECK (question1 BETWEEN 1 AND 5),
+    CONSTRAINT ques2 CHECK (question2 BETWEEN 1 AND 5)
+);
+
+CREATE TABLE IF NOT EXISTS old_passwords (
+    userID INT NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    changedTime TIMESTAMP NOT NULL,
+    FOREIGN KEY (userID) REFERENCES users(userID)
 );
 
 -- Set the auto-increment starting value and maximum value for userID
@@ -108,10 +124,12 @@ AUTO_INCREMENT = 30000000;
 CREATE TABLE IF NOT EXISTS shoppingCart (
 	userID INT NOT NULL,
 	productID INT NOT NULL,
+    variationID INT NOT NULL,
 	quantity INT NOT NULL,
 	dateAdded TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	FOREIGN KEY (userID) REFERENCES users(userID),
-	FOREIGN KEY (productID) REFERENCES products(productID)
+	FOREIGN KEY (productID) REFERENCES products(productID),
+    FOREIGN KEY (variationID) REFERENCES productsVariation(variationID)
 );
 
 CREATE TABLE IF NOT EXISTS wishlist (
@@ -149,3 +167,13 @@ CREATE TABLE IF NOT EXISTS productImages (
         ON DELETE CASCADE
         ON UPDATE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS `logs` (
+	logID INT PRIMARY KEY AUTO_INCREMENT,
+    `timestamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    details VARCHAR(300) NOT NULL
+);
+
+-- Set the auto-increment starting value and maximum value for logTable
+ALTER TABLE `logs`
+AUTO_INCREMENT = 10000000;

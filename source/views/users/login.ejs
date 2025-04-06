@@ -20,6 +20,14 @@
         </div>
         <div class = "content-container">
             <form id = "register-form-container">
+                <div id = "password-policy"> 
+                    Password must be at least 8 characters long. <br>
+                    Password must also have at least one of each: <br>
+                    Uppercase Character <br>
+                    Lowercase Character <br>
+                    Number <br>
+                    Special Character <br>
+                </div>
                 <div class = "input-container-register">
                     <div class = "input-box name">
                             <input type = "text" id = "register-first-name" placeholder = "First Name" required>
@@ -34,6 +42,31 @@
                     <div class = "input-box password">
                         <input type = "password" id = "register-password" placeholder = "Password" required>
                         <i class="fa-solid fa-eye show-password" id="toggle-register" style="color: #969696;"></i>
+                    </div>
+                    <select id="question1">
+                        <option value="">-- Select a security question --</option>
+                        <option value="1">What is your favorite food?</option>
+                        <option value="2">What was your first pet's name?</option>
+                        <option value="3">What is your mother's maiden name?</option>
+                        <option value="4">What elementary school did you attend?</option>
+                        <option value="5">What high school did you attend?</option>
+                    </select>
+
+                    <div class = "input-box answer1">
+                        <input type = "text" id = "register-answer1" name = "register-answer1" placeholder = "Answer to security question" required >
+                    </div>
+                
+                    <select id="question2">
+                        <option value="">-- Select another security question --</option>
+                        <option value="1">What is your favorite food?</option>
+                        <option value="2">What was your first pet's name?</option>
+                        <option value="3">What is your mother's maiden name?</option>
+                        <option value="4">What elementary school did you attend?</option>
+                        <option value="5">What high school did you attend?</option>
+                    </select>
+
+                    <div class = "input-box answer2">
+                        <input type = "text" id = "register-answer2" name = "register-answer2" placeholder = "Answer to security question" required >
                     </div>
                 </div>
                 <button type="submit" id = "register-button"> Create account</button>
@@ -53,7 +86,7 @@
                         <input type="checkbox" id="remember-me" name="remember-me">
                         <label for="remember-me">Remember Me</label>
                     </div>
-                    <a href=""><span class="option-items">Forgot Password?</span></a>
+                    <a href="/passwordReset"><span class="option-items">Forgot Password?</span></a>
                 </div>
                 <div class = "terms-container">
                     By logging into my account, I agree to Kaia Apparel’s <a href="/">Term’s and condition</a> and <a href="/">Privacy policy</a>.
