@@ -16,6 +16,8 @@ const Image = require('../models/Image.js');
 const Variation = require('../models/Variation.js');
 const Wishlist = require('../models/Wishlist.js');
 const ShoppingCart = require('../models/ShoppingCart.js');
+const Logger = require('../utils/logger');
+const logger = new Logger();
 
 const UserController = {
 
@@ -57,16 +59,23 @@ const UserController = {
     */
     getLogin: (req, res) => {
         try {
-            if( req.session.authorized && req.session.rememberMe ) {
-                res.redirect('/homepage');
+            if (req.session.authorized && req.session.rememberMe) {
+            res.redirect('/homepage');
             } else {
-                req.session.authorized = false;
-                res.render('users/login.ejs');
+            req.session.authorized = false;
+            res.render('users/login.ejs');
             }
-        } catch( error ) {
-            console.log( "getLogin() error: ", error );
+        } catch (error) {
+            logger.logSecurityEvent({
+            userID: req.session.userID || 'N/A',
+            action: 'Render Login Page Error',
+            status: 500,
+            route: req.originalUrl,
+            message: `Error rendering login page: ${error.message}`
+            });
+            console.log("getLogin() error:", error);
         }
-    }, 
+    },
 
     /*
         ` This function is called when the user sends a POST request to path '/login',
@@ -81,54 +90,122 @@ const UserController = {
         TODO: 
             - Create middleware to validate and sanitize the inputs
     */
-    postLogin: async (req, res) => {        
+    postLogin: async (req, res) => {
         try {
-            if( req.session.authorized && req.session.rememberMe ) {
-                res.redirect('/homepage');
+            if (req.session.authorized && req.session.rememberMe) {
+            res.redirect('/homepage');
             }
-
+    
             const { email, password, rememberMe } = req.body;
-            const login = await User.login( email, password );
-
-            if( login.status !== 200 ) {
+            const login = await User.login(email, password);
+    
+            if (login.status === 401 || login.status === 404) {
+                logger.logSecurityEvent({
+                    userID: req.session.userID || 'N/A',
+                    action: 'Failed Login Attempt',
+                    status: login.status,
+                    route: req.originalUrl,
+                    message: `Invalid credentials for user not found`
+                });
                 return res.status(401).json({ message: 'Invalid credentials' });
-            } 
-
-            // - Perform queries
-            const {userID} = await User.getUserID(email);
-            const {highestRole} = await User.getHighestRole(email);
-
-            console.log( "login", login );
-
+            } else if (login.status === 402) {
+            logger.logSecurityEvent({
+                userID: req.session.userID || 'N/A',
+                action: 'Account Locked',
+                status: 402,
+                route: req.originalUrl,
+                message: 'User account is locked'
+            });
+            return res.status(402).json({ message: "Account is locked" });
+            }
+    
+            // Fetch and set session details
+            const { userID } = await User.getUserID(email);
+            const { highestRole, roleID } = await User.getHighestRole(email);
             req.session.rememberMe = rememberMe === 'true';
             req.session.authorized = true;
             req.session.email = email;
             req.session.username = login.username;
             req.session.userID = userID;
             req.session.userRole = highestRole;
-
-            const username = req.session.username;
-
-            if( req.session.userRole == 'admin' ) {
-                return res.status(200).json({ message: "Admin login successful.", role: 'admin', username: username });
+            req.session.roleID = roleID;
+    
+            logger.logSecurityEvent({
+            userID: req.session.userID,
+            action: 'Successful Login',
+            status: login.status,
+            route: req.originalUrl,
+            message: `User ${login.username} logged in. Role: ${highestRole}`
+            });
+    
+            if (req.session.userRole === 'admin') {
+            return res.status(200).json({
+                message: "Admin login successful.",
+                role: 'admin',
+                username: login.username,
+                lastLogin: login.lastLogin
+            });
             } else {
-                return res.status(201).json({ message: "User login successful.", role: 'customer', username: username });
-            }   
-        } catch( error ) {
-            console.error(error); 
+            return res.status(201).json({
+                message: "User login successful.",
+                role: 'customer',
+                username: login.username,
+                lastLogin: login.lastLogin
+            });
+            }
+        } catch (error) {
+            logger.logSecurityEvent({
+            userID: req.session.userID || 'N/A',
+            action: 'Login Exception',
+            status: 500,
+            route: req.originalUrl,
+            message: `Exception during login: ${error.message}`
+            });
+            console.error(error);
             return res.status(500).json({ message: 'An error occurred during login. Please try again.' });
         }
-    },
+        },
 
     logout: (req, res) => {
         try {
-            req.session.destroy();
-            res.render('users/homepage'); 
-        } catch( error ) {
+            const uid = req.session.userID;
+            req.session.destroy(() => {
+            logger.logSecurityEvent({
+                userID: uid || 'N/A',
+                action: 'Logout',
+                status: 200,
+                route: '/logout',
+                message: 'User logged out successfully'
+            });
+            });
+            res.render('users/homepage');
+        } catch (error) {
+            logger.logSecurityEvent({
+            userID: req.session.userID || 'N/A',
+            action: 'Logout Exception',
+            status: 500,
+            route: req.originalUrl,
+            message: `Error during logout: ${error.message}`
+            });
             console.error(error);
-            return res.status(500).json({ message: "An error occurred during login. Please try again." });
+            return res.status(500).json({ message: "An error occurred during logout. Please try again." });
         }
     },
+
+    passwordReset: (req, res) => {
+        try {
+            res.render('users/passwordReset.ejs');
+        } catch (error) {
+            logger.logSecurityEvent({
+            userID: req.session.userID || 'N/A',
+            action: 'Render Password Reset Error',
+            status: 500,
+            route: req.originalUrl,
+            message: `Error rendering password reset page: ${error.message}`
+            });
+            res.status(500).send("Error rendering password reset page.");
+        }
+        },
 
     /**
         ` This function should execute when the user sends a POST request to path '/register',
@@ -139,38 +216,80 @@ const UserController = {
         TODO: 
             - Create middleware to validate and sanitize the inputs
     */
-    register: async (req, res) => {   
+    register: async (req, res) => {
         try {
-            const { name, username, email, password } = req.body;
-            const isEmailRegistered = await User.doesEmailExist( email );
-            const isUsernameRegistered = await User.doesUsernameExist( username );
-
-            if( isEmailRegistered ) {
-                console.log( "The email: \"" + email + "\" is already registered" );
+            const { name, username, email, password, question1, answer1, question2, answer2 } = req.body;
+            const isEmailRegistered = await User.doesEmailExist(email);
+            const isUsernameRegistered = await User.doesUsernameExist(username);
+    
+            if (isEmailRegistered) {
+                logger.logSecurityEvent({
+                    userID: 'N/A',
+                    action: 'Registration Failed',
+                    status: 400,
+                    route: req.originalUrl,
+                    message: `Email ${email} is already registered`
+                });
                 return res.status(400).json({ message: "This email is already registered." });
-            } else if( isUsernameRegistered ) {
-                console.log( "The email: \"" + username + "\" is already registered" );
+            } else if (isUsernameRegistered) {
+                logger.logSecurityEvent({
+                    userID: 'N/A',
+                    action: 'Registration Failed',
+                    status: 400,
+                    route: req.originalUrl,
+                    message: `Username ${username} is already registered`
+                });
                 return res.status(400).json({ message: "This username is already registered." });
             }
-            User.register( name.firstName, name.lastName, username, email, password );
+    
+            await User.register(
+            name.firstName,
+            name.lastName,
+            username,
+            email,
+            password,
+            question1,
+            answer1,
+            question2,
+            answer2
+            );
+    
+            logger.logSecurityEvent({
+                userID: 'N/A',
+                action: 'Registration Successful',
+                status: 201,
+                route: req.originalUrl,
+                message: `User registered with email: ${email}`
+            });
+    
             return res.status(201).json({ message: "Registration successful." });
-        } catch( error ) {
-            console.error( "Error registering user: ", error );
+        } catch (error) {
+            logger.logSecurityEvent({
+                userID: 'N/A',
+                action: 'Registration Exception',
+                status: 500,
+                route: req.originalUrl,
+                message: `Exception during registration: ${error.message}`
+            });
+            console.error("Error registering user:", error);
             return res.status(500).json({ message: "Registration failed." });
         }
     },
 
     /*
     */
-   homepage: async (req, res) => {
+    homepage: async (req, res) => {
         try {
-            if( true ) {
-                res.render('users/homepage.ejs');
-            } else {
-                res.redirect('/login');
-            }
-        } catch( error ) {
-            console.log( "homepage() error: ", error );
+          res.render('users/homepage.ejs');
+        } catch (error) {
+          logger.logSecurityEvent({
+            userID: req.session.userID || 'N/A',
+            action: 'Homepage Render Error',
+            status: 500,
+            route: req.originalUrl,
+            message: `Error rendering homepage: ${error.message}`
+          });
+          console.log("homepage() error:", error);
         }
     },
 
@@ -178,183 +297,188 @@ const UserController = {
     */
     productCatalog: async (req, res) => {
         try {
-            const { categories } = await Product.getBottomMostCategories();
-            const { products } = await Product.getAllProductsWithImages();
-
-            res.status(200).render('users/productCatalog.ejs', { categories: categories, products: products });
-        } catch( error ) {
-            console.log( "productCatalog() error: ", error );
+          const { categories } = await Product.getBottomMostCategories();
+          const { products } = await Product.getAllProductsWithImages();
+    
+          res.status(200).render('users/productCatalog.ejs', { categories, products });
+        } catch (error) {
+          logger.logSecurityEvent({
+            userID: req.session.userID || 'N/A',
+            action: 'Product Catalog Error',
+            status: 500,
+            route: req.originalUrl,
+            message: `Error fetching product catalog: ${error.message}`
+          });
+          console.log("productCatalog() error:", error);
         }
     },
 
     viewProduct: async (req, res) => {
         try {
-            const productID = req.query.productID;
-            const { categories } = await Product.getBottomMostCategories();
-            const { product } = await Product.getProductWithImageByID(productID);
-            const { images } = await Image.getAllImagesOfProduct(productID);
-            const { variations } = await Variation.getAllVariationsOfProduct(productID);
-
-            var isWishlisted = false;
-            if( req.session.authorized ) {
-                const userID = req.session.userID;
-                const {wishlist} = await Wishlist.getUserWishlist( userID );
-                isWishlisted = wishlist.some(item => item.productID === product.productID);
-            } 
-
-            res.status(200).render('./users/viewProduct.ejs', { 
-                categories: categories, product: product, productID: productID, 
-                productImages: images, variations: variations, isWishlisted: isWishlisted
-            });
-        } catch( error ) {
-            console.log( error );
-        }
-    },
-
-    wishlist: async (req, res) => {
-        try {
-            if( req.session.authorized ) {
-                const userID = req.session.userID;
-                const { wishlist } = await Wishlist.getUserWishlist( userID );
-                res.status(200).render('./users/wishlist.ejs', { wishlist: wishlist });
-            } else {
-                res.redirect('/');
-            }
-        } catch( error ) {
-            console.log( error );
-        }
-    },
-
-    wishlistProduct: async (req, res) => {
-        try { 
-            if( req.session.authorized === true ) {
-                const { productID } = req.body;
-                const userID = req.session.userID; 
-                const parsedProductID = parseInt(productID.replace(/\D/g, ''));
-
-                /*
-                    200 - product is wishlisted
-                    404 - product not wishlisted
-                    500 - internal server error 
-                */
-                const wishlistStatus = await Wishlist.checkWishlistStatus( userID, parsedProductID );
-                
-                if( wishlistStatus.status === 200 ) {
-                    /*
-                        200 - remove from wishlist
-                        500 - internal server error
-                    */
-                    const response = await Wishlist.removeFromWishlist( userID, parsedProductID );
-                    return res.status(response.status).json({ message: "Product removed from wishlist." });
-                } else if( wishlistStatus.status === 404 ) {
-                    /*
-                        201 - added to wishlist
-                        500 - internal server error
-                    */
-                    const response = await Wishlist.addToWishlist( userID, parsedProductID );
-                    return res.status(response.status).json({ message: "Product added to wishlist." });
-                } else {
-                    return res.status(500).json({ message: wishlistStatus.message });
-                }
-            } else {
-                return res.status(404).json({ message: "User not logged in." });;
-            }
-        } catch( error ) {
-            console.log( "wishlistProduct Error:", error );
-            res.status(500).json({ message: "Internal server error." });
-        }
-
-
-        console.log( "req.session.authorized", req.session.authorized );
-        if( req.session.authorized === true ) {
-            try { 
-                const { productID } = req.body;
-                const userID = req.session.userID; 
-                const parsedProductID = parseInt(productID.replace(/\D/g, ''));
-
-                /*
-                    200 - product is wishlisted
-                    404 - product not wishlisted
-                    500 - internal server error 
-                */
-                const wishlistStatus = await Wishlist.checkWishlistStatus( userID, parsedProductID );
-                
-                if( wishlistStatus.status === 200 ) {
-                    /*
-                        200 - remove from wishlist
-                        500 - internal server error
-                    */
-                    const response = await Wishlist.removeFromWishlist( userID, parsedProductID );
-                    return res.status(response.status).json({ message: "Product removed from wishlist." });
-                } else if( wishlistStatus.status === 404 ) {
-                    /*
-                        201 - added to wishlist
-                        500 - internal server error
-                    */
-                    const response = await Wishlist.addToWishlist( userID, parsedProductID );
-                    return res.status(response.status).json({ message: "Product added to wishlist." });
-                } else {
-                    return res.status(500).json({ message: wishlistStatus.message });
-                }
-            } catch( error ) {
-                console.log( "wishlistProduct Error:", error );
-                res.status(500).json({ message: "Internal server error." });
-            }
-        } else {
-            res.redirect('/');
-        }
-    },
-
-    shoppingCart: async (req, res) => {
-        try {
-            if( req.session.authorized ) {
-                const userID = req.session.userID;
-                const { shoppingCart, status } = await ShoppingCart.getUserShoppingCart( userID );
-                if( status === 200 ) {
-                    res.status(200).render('./users/shoppingCart.ejs', { shoppingCart: shoppingCart });
-                } else if( status === 404 ) {
-                    res.status(404).render('./users/shoppingCart.ejs', { shoppingCart: shoppingCart });
-                }
-            } else {
-                res.redirect('/');
-            }
-        } catch( error ) {
-            console.log( error );
-        }
-    },
-
-    wishlist: async (req, res) => {
-        try {
-            if( req.session.authorized ) {
-                const userID = req.session.userID;
-                const { wishlist } = await Wishlist.getUserWishlist( userID );
-                res.status(200).render('./users/wishlist.ejs', { wishlist: wishlist });
-            } else {
-                res.redirect('/');
-            }
-        } catch( error ) {
-            console.log( error );
-        }
-    },
-
+          const productID = req.query.productID;
+          const { categories } = await Product.getBottomMostCategories();
+          const { product } = await Product.getProductWithImageByID(productID);
+          const { images } = await Image.getAllImagesOfProduct(productID);
+          const { variations } = await Variation.getAllVariationsOfProduct(productID);
     
+          let isWishlisted = false;
+          if (req.session.authorized) {
+            const userID = req.session.userID;
+            const { wishlist } = await Wishlist.getUserWishlist(userID);
+            isWishlisted = wishlist.some(item => item.productID === product.productID);
+          }
+    
+          res.status(200).render('users/viewProduct.ejs', {
+            categories,
+            product,
+            productID,
+            productImages: images,
+            variations,
+            isWishlisted
+          });
+        } catch (error) {
+          logger.logSecurityEvent({
+            userID: req.session.userID || 'N/A',
+            action: 'View Product Error',
+            status: 500,
+            route: req.originalUrl,
+            message: `Error retrieving product details: ${error.message}`
+          });
+          console.log(error);
+        }
+      },
+
+      wishlist: async (req, res) => {
+        try {
+          if (req.session.authorized) {
+            const userID = req.session.userID;
+            const { wishlist } = await Wishlist.getUserWishlist(userID);
+            res.status(200).render('users/wishlist.ejs', { wishlist });
+          } else {
+            res.redirect('/');
+          }
+        } catch (error) {
+          logger.logSecurityEvent({
+            userID: req.session.userID || 'N/A',
+            action: 'Wishlist Error',
+            status: 500,
+            route: req.originalUrl,
+            message: `Error fetching wishlist: ${error.message}`
+          });
+          console.log(error);
+        }
+      },
+
+      wishlistProduct: async (req, res) => {
+        try {
+          if (req.session.authorized === true) {
+            const { productID } = req.body;
+            const userID = req.session.userID;
+            const parsedProductID = parseInt(productID.replace(/\D/g, ''), 10);
+    
+            const wishlistStatus = await Wishlist.checkWishlistStatus(userID, parsedProductID);
+            if (wishlistStatus.status === 200) {
+              const response = await Wishlist.removeFromWishlist(userID, parsedProductID);
+              logger.logSecurityEvent({
+                userID: userID || 'N/A',
+                action: 'Remove from Wishlist',
+                status: response.status,
+                route: req.originalUrl,
+                message: 'Product removed from wishlist'
+              });
+              return res.status(response.status).json({ message: "Product removed from wishlist." });
+            } else if (wishlistStatus.status === 404) {
+              const response = await Wishlist.addToWishlist(userID, parsedProductID);
+              logger.logSecurityEvent({
+                userID: userID || 'N/A',
+                action: 'Add to Wishlist',
+                status: response.status,
+                route: req.originalUrl,
+                message: 'Product added to wishlist'
+              });
+              return res.status(response.status).json({ message: "Product added to wishlist." });
+            } else {
+              return res.status(500).json({ message: wishlistStatus.message });
+            }
+          } else {
+            return res.status(404).json({ message: "User not logged in." });
+          }
+        } catch (error) {
+          logger.logSecurityEvent({
+            userID: req.session.userID || 'N/A',
+            action: 'Wishlist Product Exception',
+            status: 500,
+            route: req.originalUrl,
+            message: `Exception in wishlistProduct: ${error.message}`
+          });
+          console.log("wishlistProduct Error:", error);
+          res.status(500).json({ message: "Internal server error." });
+        }
+      },
+
+      shoppingCart: async (req, res) => {
+        try {
+          if (req.session.authorized) {
+            const userID = req.session.userID;
+            const { shoppingCart, status } = await ShoppingCart.getUserShoppingCart(userID);
+            if (status === 200) {
+              res.status(200).render('users/shoppingCart.ejs', { shoppingCart });
+            } else if (status === 404) {
+              res.status(404).render('users/shoppingCart.ejs', { shoppingCart });
+            }
+          } else {
+            res.redirect('/');
+          }
+        } catch (error) {
+          logger.logSecurityEvent({
+            userID: req.session.userID || 'N/A',
+            action: 'Shopping Cart Error',
+            status: 500,
+            route: req.originalUrl,
+            message: `Error retrieving shopping cart: ${error.message}`
+          });
+          console.log(error);
+        }
+      },
+
+    wishlist: async (req, res) => {
+        try {
+            if( req.session.authorized ) {
+                const userID = req.session.userID;
+                const { wishlist } = await Wishlist.getUserWishlist( userID );
+                res.status(200).render('./users/wishlist.ejs', { wishlist: wishlist });
+            } else {
+                res.redirect('/');
+            }
+        } catch( error ) {
+            console.log( error );
+        }
+    },
+
     checkout: async (req, res) => {
         try {
-            if( req.session.authorized ) {
-                const userID = req.session.userID;
-                const { shoppingCart, status } = await ShoppingCart.getUserShoppingCart( userID );
-                if( status === 200 ) {
-                    res.status(200).render('./users/checkout.ejs', { shoppingCart: shoppingCart });
-                } else if( status === 404 ) {
-                    res.status(404).render('./users/checkout.ejs', { shoppingCart: shoppingCart });
-                }
-            } else {
-                res.redirect('/');
+          if (req.session.authorized) {
+            const userID = req.session.userID;
+            const { shoppingCart, status } = await ShoppingCart.getUserShoppingCart(userID);
+            if (status === 200) {
+              res.status(200).render('users/checkout.ejs', { shoppingCart });
+            } else if (status === 404) {
+              res.status(404).render('users/checkout.ejs', { shoppingCart });
             }
-        } catch( error ) {
-            console.log( error );
+          } else {
+            res.redirect('/');
+          }
+        } catch (error) {
+          logger.logSecurityEvent({
+            userID: req.session.userID || 'N/A',
+            action: 'Checkout Error',
+            status: 500,
+            route: req.originalUrl,
+            message: `Error during checkout: ${error.message}`
+          });
+          console.log(error);
         }
-    },
+      },
 
     /*
     checkShoppingCartStatus: async (req, res) => {
@@ -418,6 +542,105 @@ const UserController = {
             res.status(500).json({ message: "Internal server error." });
         }
     },
+
+    userCheck: async (req, res) => {
+        try {
+            const { email } = req.body;
+            const exists = await User.doesEmailExist(email);
+
+            if (exists) {
+            const { status } = await User.checkPasswordTime(email);
+            if (status === 201) {
+                return res.status(201).json({ message: "User Can Change Password" });
+            }
+            return res.status(402).json({ message: "User Cannot Change Password" });
+            } else {
+            return res.status(401).json({ message: 'Cannot find email' });
+            }
+        } catch (error) {
+            logger.logSecurityEvent({
+            userID: req.session.userID || 'N/A',
+            action: 'User Check Error',
+            status: 500,
+            route: req.originalUrl,
+            message: `Error in userCheck: ${error.message}`
+            });
+            console.error(error);
+            return res.status(500).json({ message: 'An error occurred during user lookup. Please try again.' });
+        }
+    },
+    
+    securityQuestion: async (req, res) => {
+        try {
+          const { email } = req.body;
+          const { status, question1, question2 } = await User.getSecurityQuestions(email);
+    
+          if (status === 201) {
+            return res.status(201).json({ message: "Successfully found security questions.", question1, question2 });
+          }
+          return res.status(500).json({ message: 'Internal Server Error' });
+        } catch (error) {
+          logger.logSecurityEvent({
+            userID: req.session.userID || 'N/A',
+            action: 'Security Question Error',
+            status: 500,
+            route: req.originalUrl,
+            message: `Error fetching security questions: ${error.message}`
+          });
+          console.error(error);
+          return res.status(500).json({ message: 'Internal Server Error' });
+        }
+      },
+
+    compareAnswers: async (req, res) => {
+        try {
+            const { email, answer1, answer2 } = req.body;
+            const { status } = await User.compareAnswers(email, answer1, answer2);
+
+            if (status === 201) {
+            return res.status(201).json({ message: "Answers are correct." });
+            } else if (status === 401) {
+            return res.status(401).json({ message: "Answers are not correct." });
+            }
+            return res.status(500).json({ message: "Internal Server Error" });
+        } catch (error) {
+            logger.logSecurityEvent({
+            userID: req.session.userID || 'N/A',
+            action: 'Compare Answers Error',
+            status: 500,
+            route: req.originalUrl,
+            message: `Error comparing security answers: ${error.message}`
+            });
+            console.error(error);
+            return res.status(500).json({ message: 'Internal Server Error' });
+        }
+    },
+
+    postPasswordReset: async (req, res) => {
+        try {
+          const { email, password } = req.body;
+          const { status } = await User.passwordReset(email, password);
+    
+          if (status === 201) {
+            return res.status(201).json({ message: "Password Changed Successfully." });
+          } else if (status === 401) {
+            return res.status(401).json({ message: "Password Is Same As Current" });
+          } else if (status === 402) {
+            return res.status(402).json({ message: "This Password Has Been Used Before" });
+          }
+          return res.status(500).json({ message: "Internal Server Error" });
+        } catch (error) {
+          logger.logSecurityEvent({
+            userID: req.session.userID || 'N/A',
+            action: 'Password Reset Error',
+            status: 500,
+            route: req.originalUrl,
+            message: `Error during password reset: ${error.message}`
+          });
+          console.error(error);
+          return res.status(500).json({ message: 'Internal Server Error' });
+        }
+    }
 }
 
 module.exports = UserController;

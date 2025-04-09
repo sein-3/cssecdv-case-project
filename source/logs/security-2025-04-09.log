@@ -1,0 +1,30 @@
+2025-04-09T09:33:23.100Z | UserID: N/A | Action: Failed Login Attempt | Status: 401 | Route: /login | Message: Invalid credentials or user not found
+2025-04-09T09:33:23.151Z | UserID: N/A | Action: Failed Login Attempt | Status: 401 | Route: /login | Message: Invalid credentials or user not found
+2025-04-09T09:33:23.271Z | UserID: N/A | Action: Failed Login Attempt | Status: 401 | Route: /login | Message: Invalid credentials or user not found
+2025-04-09T09:33:23.387Z | UserID: N/A | Action: Failed Login Attempt | Status: 401 | Route: /login | Message: Invalid credentials or user not found
+2025-04-09T09:33:23.502Z | UserID: N/A | Action: Failed Login Attempt | Status: 401 | Route: /login | Message: Invalid credentials or user not found
+2025-04-09T09:33:23.621Z | UserID: N/A | Action: Failed Login Attempt | Status: 401 | Route: /login | Message: Invalid credentials or user not found
+2025-04-09T09:43:34.614Z | UserID: N/A | Action: Failed Login Attempt | Status: 401 | Route: /login | Message: Invalid credentials for user not found
+2025-04-09T09:43:37.915Z | UserID: N/A | Action: Failed Login Attempt | Status: 401 | Route: /login | Message: Invalid credentials for user not found
+2025-04-09T09:43:39.991Z | UserID: 10000002 | Action: Successful Login | Status: 200 | Route: /login | Message: User AdminLoggerAcc logged in. Role: adminlogger
+2025-04-09T09:45:45.385Z | UserID: N/A | Action: Logout | Status: 200 | Route: /logout | Message: User logged out successfully
+2025-04-09T09:45:56.770Z | UserID: 10000002 | Action: Successful Login | Status: 200 | Route: /login | Message: User AdminLoggerAcc logged in. Role: adminlogger
+2025-04-09T09:47:58.738Z | UserID: N/A | Action: Logout | Status: 200 | Route: /logout | Message: User logged out successfully
+2025-04-09T09:48:11.093Z | UserID: 10000002 | Action: Successful Login | Status: 200 | Route: /login | Message: User AdminLoggerAcc logged in. Role: adminlogger
+2025-04-09T09:48:31.665Z | UserID: 10000002 | Action: Successful Login | Status: 200 | Route: /login | Message: User AdminLoggerAcc logged in. Role: adminlogger
+2025-04-09T09:48:54.807Z | UserID: 10000002 | Action: Successful Login | Status: 200 | Route: /login | Message: User AdminLoggerAcc logged in. Role: adminlogger
+2025-04-09T09:49:17.293Z | UserID: 10000002 | Action: Logout | Status: 200 | Route: /logout | Message: User logged out successfully
+2025-04-09T09:49:21.730Z | UserID: 10000002 | Action: Successful Login | Status: 200 | Route: /login | Message: User AdminLoggerAcc logged in. Role: adminlogger
+2025-04-09T09:54:05.645Z | UserID: N/A | Action: Logout | Status: 200 | Route: /logout | Message: User logged out successfully
+2025-04-09T10:01:20.520Z | UserID: 10000000 | Action: Successful Login | Status: 200 | Route: /login | Message: User CustomerAcc logged in. Role: customer
+2025-04-09T10:01:50.092Z | UserID: 10000000 | Action: Add to Wishlist | Status: 201 | Route: /wishlistProduct | Message: Product added to wishlist
+2025-04-09T10:02:11.668Z | UserID: 10000000 | Action: Remove from Wishlist | Status: 200 | Route: /wishlistProduct | Message: Product removed from wishlist
+2025-04-09T10:02:11.794Z | UserID: 10000000 | Action: Add to Wishlist | Status: 201 | Route: /wishlistProduct | Message: Product added to wishlist
+2025-04-09T10:02:11.925Z | UserID: 10000000 | Action: Remove from Wishlist | Status: 200 | Route: /wishlistProduct | Message: Product removed from wishlist
+2025-04-09T10:02:12.069Z | UserID: 10000000 | Action: Add to Wishlist | Status: 201 | Route: /wishlistProduct | Message: Product added to wishlist
+2025-04-09T10:02:12.423Z | UserID: 10000000 | Action: Remove from Wishlist | Status: 200 | Route: /wishlistProduct | Message: Product removed from wishlist
+2025-04-09T10:02:12.909Z | UserID: 10000000 | Action: Add to Wishlist | Status: 201 | Route: /wishlistProduct | Message: Product added to wishlist
+2025-04-09T10:02:13.294Z | UserID: 10000000 | Action: Remove from Wishlist | Status: 200 | Route: /wishlistProduct | Message: Product removed from wishlist
+2025-04-09T10:02:13.971Z | UserID: 10000000 | Action: Add to Wishlist | Status: 201 | Route: /wishlistProduct | Message: Product added to wishlist
+2025-04-09T10:02:14.271Z | UserID: 10000000 | Action: Remove from Wishlist | Status: 200 | Route: /wishlistProduct | Message: Product removed from wishlist
+2025-04-09T10:02:29.317Z | UserID: 10000000 | Action: Add to Wishlist | Status: 201 | Route: /wishlistProduct | Message: Product added to wishlist

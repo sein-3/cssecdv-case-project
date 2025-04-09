@@ -5,9 +5,8 @@ const router = express.Router();
 // - Modules
 const UserController = require('../controller/UserController.js');
 const AdminController = require('../controller/AdminController.js');
+const LoggerController = require('../controller/LoggerController.js');
 const multer = require('../config/multer.js');
-
-// - Middlewares
 const middleware = require("../controller/Middleware");
 
 router.use( middleware.fetchUser );
@@ -17,6 +16,11 @@ router.get('/login', UserController.getLogin );
 router.post('/login', UserController.postLogin );
 router.get('/logout', UserController.logout );
 router.post('/register', UserController.register );
+router.get('/passwordReset', UserController.passwordReset);
+router.post('/userCheck', UserController.userCheck);
+router.post('/getSecurityQuestion', UserController.securityQuestion);
+router.post('/securityQuestion', UserController.compareAnswers);
+router.post('/passwordReset', UserController.postPasswordReset);
 router.get('/productCatalog', UserController.productCatalog );
 router.get('/upload', UserController.getUpload );
 router.post('/upload', multer.single("product"), UserController.postUpload );
@@ -42,8 +46,10 @@ router.post('/uploadImageReference', AdminController.uploadImageReference );
 router.post('/createProductImage', AdminController.createProductImage );
 router.post('/deleteProductImage', AdminController.deleteProductImage );
 
+router.get('/viewLogs', LoggerController.viewLogs );
+
 router.get('/', (req, res) => {
-    res.redirect('/login');
+    res.redirect('/homepage');
 });
 
 router.get('/admin', (req, res) => {
