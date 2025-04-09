@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>View Security Logs</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Link to custom CSS file -->
+    <link rel="stylesheet" type="text/css" href="/css/admin/viewLogs.css">
+</head>
+<body>
+    <%- include("../main/admin-header.ejs") %>
+    
+    <div class="container">
+        <h1>Security Logs</h1>
+        <!-- Form to select log date -->
+        <form action="/viewLogs" method="get" class="log-date-form">
+            <label for="date-select">Select Log Date:</label>
+            <select id="date-select" name="date">
+                <% availableLogs.forEach(function(date) { %>
+                    <option value="<%= date %>" <%= selectedDate === date ? 'selected' : '' %>><%= date %></option>
+                <% }); %>
+            </select>
+            <button type="submit">View Logs</button>
+        </form>
+
+        <!-- Display the log file content with formatting -->
+        <div class="log-content">
+            <% logContent.split('\n').forEach(function(line) { %>
+                <% if (line.trim()) { %>
+                    <div class="log-line">
+                        <% var parts = line.split(' | '); %>
+                        <% parts.forEach(function(part, index) { 
+                             var cls = '';
+                             if (index === 0) { cls = 'timestamp'; }
+                             else if (part.indexOf('UserID:') !== -1) { cls = 'user'; }
+                             else if (part.indexOf('Action:') !== -1) { cls = 'action'; }
+                             else if (part.indexOf('Status:') !== -1) { cls = 'status'; }
+                             else if (part.indexOf('Route:') !== -1) { cls = 'route'; }
+                             else if (part.indexOf('Message:') !== -1) { cls = 'message'; }
+                        %>
+                        <span class="<%= cls %>"><%= part %></span>
+                        <% }); %>
+                    </div>
+                <% } %>
+            <% }); %>
+        </div>
+    </div>
+
+    <%- include("../main/footer.ejs") %>
+</body>
+</html>

@@ -1,0 +1,91 @@
+/* /css/admin/view-logs.css */
+body {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #f7f7f7;
+}
+
+.container {
+    width: 100%;
+    max-width: 1600px;
+    margin: 20px auto;
+    background: #fff;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Log date form styling */
+.log-date-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.log-date-form label {
+    margin-right: 10px;
+}
+
+.log-date-form select {
+    padding: 5px;
+    margin-right: 10px;
+}
+
+/* Log content container */
+.log-content {
+    background: #333;
+    color: #ddd;
+    padding: 20px;
+    overflow-x: auto;
+    margin-top: 20px;
+}
+
+/* Each log line styling */
+.log-line {
+    margin-bottom: 10px;
+    padding: 8px;
+    border-bottom: 1px solid #444;
+}
+
+.log-line:last-child {
+    border-bottom: none;
+}
+
+/* Styling for specific log line parts */
+.timestamp {
+    font-weight: bold;
+    color: #ffcc00; /* Bright yellow */
+    margin-right: 10px;
+}
+
+.user {
+    font-weight: bold;
+    color: #39ff14; /* Neon green */
+    margin-right: 10px;
+}
+
+.action {
+    color: #00c8ff;
+    margin-right: 10px;
+}
+
+.status {
+    font-weight: bold;
+    color: #ff004f;
+    margin-right: 10px;
+}
+
+.route {
+    color: #ffffff;
+    margin-right: 10px;
+}
+
+.message {
+    color: #cccccc;
+}

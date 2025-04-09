@@ -75,7 +75,7 @@ const UserController = {
             });
             console.log("getLogin() error:", error);
         }
-        },
+    },
 
     /*
         ` This function is called when the user sends a POST request to path '/login',
@@ -97,31 +97,17 @@ const UserController = {
             }
     
             const { email, password, rememberMe } = req.body;
-<<<<<<< Updated upstream
-            const login = await User.login( email, password );
-
-            if( login.status !== 200 ) {
-                return res.status(401).json({ message: 'Invalid credentials' });
-            } 
-
-            // - Perform queries
-            const {userID} = await User.getUserID(email);
-            const {highestRole} = await User.getHighestRole(email);
-
-            console.log( "login", login );
-
-=======
             const login = await User.login(email, password);
     
             if (login.status === 401 || login.status === 404) {
-            logger.logSecurityEvent({
-                userID: req.session.userID || 'N/A',
-                action: 'Failed Login Attempt',
-                status: login.status,
-                route: req.originalUrl,
-                message: 'Invalid credentials or user not found'
-            });
-            return res.status(401).json({ message: 'Invalid credentials' });
+                logger.logSecurityEvent({
+                    userID: req.session.userID || 'N/A',
+                    action: 'Failed Login Attempt',
+                    status: login.status,
+                    route: req.originalUrl,
+                    message: `Invalid credentials for user not found`
+                });
+                return res.status(401).json({ message: 'Invalid credentials' });
             } else if (login.status === 402) {
             logger.logSecurityEvent({
                 userID: req.session.userID || 'N/A',
@@ -136,25 +122,12 @@ const UserController = {
             // Fetch and set session details
             const { userID } = await User.getUserID(email);
             const { highestRole, roleID } = await User.getHighestRole(email);
->>>>>>> Stashed changes
             req.session.rememberMe = rememberMe === 'true';
             req.session.authorized = true;
             req.session.email = email;
             req.session.username = login.username;
             req.session.userID = userID;
             req.session.userRole = highestRole;
-<<<<<<< Updated upstream
-
-            const username = req.session.username;
-
-            if( req.session.userRole == 'admin' ) {
-                return res.status(200).json({ message: "Admin login successful.", role: 'admin', username: username });
-            } else {
-                return res.status(201).json({ message: "User login successful.", role: 'customer', username: username });
-            }   
-        } catch( error ) {
-            console.error(error); 
-=======
             req.session.roleID = roleID;
     
             logger.logSecurityEvent({
@@ -189,7 +162,6 @@ const UserController = {
             message: `Exception during login: ${error.message}`
             });
             console.error(error);
->>>>>>> Stashed changes
             return res.status(500).json({ message: 'An error occurred during login. Please try again.' });
         }
         },
@@ -218,10 +190,8 @@ const UserController = {
             console.error(error);
             return res.status(500).json({ message: "An error occurred during logout. Please try again." });
         }
-        },
+    },
 
-<<<<<<< Updated upstream
-=======
     passwordReset: (req, res) => {
         try {
             res.render('users/passwordReset.ejs');
@@ -237,7 +207,6 @@ const UserController = {
         }
         },
 
->>>>>>> Stashed changes
     /**
         ` This function should execute when the user sends a POST request to path '/register',
         which occurs when the register button is pressed in the registration page. It assumes
@@ -249,42 +218,28 @@ const UserController = {
     */
     register: async (req, res) => {
         try {
-<<<<<<< Updated upstream
-            const { name, username, email, password } = req.body;
-            const isEmailRegistered = await User.doesEmailExist( email );
-            const isUsernameRegistered = await User.doesUsernameExist( username );
-
-            if( isEmailRegistered ) {
-                console.log( "The email: \"" + email + "\" is already registered" );
-                return res.status(400).json({ message: "This email is already registered." });
-            } else if( isUsernameRegistered ) {
-                console.log( "The email: \"" + username + "\" is already registered" );
-                return res.status(400).json({ message: "This username is already registered." });
-            }
-            User.register( name.firstName, name.lastName, username, email, password );
-=======
             const { name, username, email, password, question1, answer1, question2, answer2 } = req.body;
             const isEmailRegistered = await User.doesEmailExist(email);
             const isUsernameRegistered = await User.doesUsernameExist(username);
     
             if (isEmailRegistered) {
-            logger.logSecurityEvent({
-                userID: 'N/A',
-                action: 'Registration Failed',
-                status: 400,
-                route: req.originalUrl,
-                message: `Email ${email} is already registered`
-            });
-            return res.status(400).json({ message: "This email is already registered." });
+                logger.logSecurityEvent({
+                    userID: 'N/A',
+                    action: 'Registration Failed',
+                    status: 400,
+                    route: req.originalUrl,
+                    message: `Email ${email} is already registered`
+                });
+                return res.status(400).json({ message: "This email is already registered." });
             } else if (isUsernameRegistered) {
-            logger.logSecurityEvent({
-                userID: 'N/A',
-                action: 'Registration Failed',
-                status: 400,
-                route: req.originalUrl,
-                message: `Username ${username} is already registered`
-            });
-            return res.status(400).json({ message: "This username is already registered." });
+                logger.logSecurityEvent({
+                    userID: 'N/A',
+                    action: 'Registration Failed',
+                    status: 400,
+                    route: req.originalUrl,
+                    message: `Username ${username} is already registered`
+                });
+                return res.status(400).json({ message: "This username is already registered." });
             }
     
             await User.register(
@@ -300,27 +255,26 @@ const UserController = {
             );
     
             logger.logSecurityEvent({
-            userID: 'N/A',
-            action: 'Registration Successful',
-            status: 201,
-            route: req.originalUrl,
-            message: `User registered with email: ${email}`
+                userID: 'N/A',
+                action: 'Registration Successful',
+                status: 201,
+                route: req.originalUrl,
+                message: `User registered with email: ${email}`
             });
     
->>>>>>> Stashed changes
             return res.status(201).json({ message: "Registration successful." });
         } catch (error) {
             logger.logSecurityEvent({
-            userID: 'N/A',
-            action: 'Registration Exception',
-            status: 500,
-            route: req.originalUrl,
-            message: `Exception during registration: ${error.message}`
+                userID: 'N/A',
+                action: 'Registration Exception',
+                status: 500,
+                route: req.originalUrl,
+                message: `Exception during registration: ${error.message}`
             });
             console.error("Error registering user:", error);
             return res.status(500).json({ message: "Registration failed." });
         }
-        },
+    },
 
     /*
     */
@@ -588,8 +542,6 @@ const UserController = {
             res.status(500).json({ message: "Internal server error." });
         }
     },
-<<<<<<< Updated upstream
-=======
 
     userCheck: async (req, res) => {
         try {
@@ -689,7 +641,6 @@ const UserController = {
           return res.status(500).json({ message: 'Internal Server Error' });
         }
     }
->>>>>>> Stashed changes
 }
 
 module.exports = UserController;
