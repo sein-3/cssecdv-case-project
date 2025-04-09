@@ -18,7 +18,7 @@ class ShoppingCart {
                 return { status: 204, message: "Product is not in shopping cart." };
             }
         } catch (error) {
-            console.log( "checkShoppingCartStatus() Error:", error );
+            //  console.log( "checkShoppingCartStatus() Error:", error );
             return { status: 500, message: "Internal server error: " + error.message };
         }
     }
@@ -34,7 +34,7 @@ class ShoppingCart {
             await db.execute(sql, values);
             return { status: 201, message: "Product added to shopping cart." };
         } catch (error) {
-            console.log( "addToShoppingCart() Error:", error );
+            //  console.log( "addToShoppingCart() Error:", error );
             return { status: 500, message: "Internal server error: " + error.message };
         }
     }
@@ -50,7 +50,7 @@ class ShoppingCart {
             await db.execute(sql, values);
             return { status: 200, message: "Product removed from shopping cart." };
         } catch (error) {
-            console.log( "removeFromShoppingCart() Error:", error );
+            //  console.log( "removeFromShoppingCart() Error:", error );
             return { status: 500, message: "Internal server error: " + error.message };
         }
     }
@@ -84,7 +84,7 @@ class ShoppingCart {
 
             return { status: 200, shoppingCart: rows };
         } catch (error) {
-            console.log( "getUserShoppingCart() Error:", error );
+            //  console.log( "getUserShoppingCart() Error:", error );
             return { status: 500, message: "Internal server error: " + error.message };
         }
     }
@@ -100,7 +100,7 @@ class ShoppingCart {
             await db.execute(sql, values);
             return { status: 200, message: "Product quantity updated in shopping cart." };
         } catch (error) {
-            console.log( "updateItemQuantity() Error:", error );
+            //  console.log( "updateItemQuantity() Error:", error );
             return { status: 500, message: "Internal server error: " + error.message };
         }
 

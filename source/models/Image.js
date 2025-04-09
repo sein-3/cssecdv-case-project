@@ -91,7 +91,7 @@ class Image {
             } return { status: 200, images: rows };
 
         } catch( error ) {
-            console.log( "Image.js / getAllImagesOfProduct Error: ", error );
+            // console.log( "Image.js / getAllImagesOfProduct Error: ", error );
             return { status: 500, message: "Internal server error.", images: null };
         }
     }

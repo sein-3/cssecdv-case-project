@@ -25,7 +25,7 @@ const UserController = {
         try {
             res.render('users/upload.ejs');
         } catch( error ) {
-            console.log( "getUpload() error: ", error );
+            // console.log( "getUpload() error: ", error );
         }
     },
 
@@ -47,7 +47,7 @@ const UserController = {
                 return res.status(404).send( "File not found." );
             }
         } catch( error ) {
-            console.log( "Error: File upload failed" );
+            // console.log( "Error: File upload failed" );
             return res.status(500).send( "File upload failed: " + error );
         }   
     },
@@ -73,7 +73,7 @@ const UserController = {
             route: req.originalUrl,
             message: `Error rendering login page: ${error.message}`
             });
-            console.log("getLogin() error:", error);
+            // console.log("getLogin() error:", error);
         }
     },
 
@@ -289,7 +289,7 @@ const UserController = {
             route: req.originalUrl,
             message: `Error rendering homepage: ${error.message}`
           });
-          console.log("homepage() error:", error);
+          // console.log("homepage() error:", error);
         }
     },
 
@@ -309,7 +309,7 @@ const UserController = {
             route: req.originalUrl,
             message: `Error fetching product catalog: ${error.message}`
           });
-          console.log("productCatalog() error:", error);
+          // console.log("productCatalog() error:", error);
         }
     },
 
@@ -344,7 +344,7 @@ const UserController = {
             route: req.originalUrl,
             message: `Error retrieving product details: ${error.message}`
           });
-          console.log(error);
+          // console.log(error);
         }
       },
 
@@ -365,7 +365,7 @@ const UserController = {
             route: req.originalUrl,
             message: `Error fetching wishlist: ${error.message}`
           });
-          console.log(error);
+          // console.log(error);
         }
       },
 
@@ -411,7 +411,7 @@ const UserController = {
             route: req.originalUrl,
             message: `Exception in wishlistProduct: ${error.message}`
           });
-          console.log("wishlistProduct Error:", error);
+          // console.log("wishlistProduct Error:", error);
           res.status(500).json({ message: "Internal server error." });
         }
       },
@@ -437,7 +437,7 @@ const UserController = {
             route: req.originalUrl,
             message: `Error retrieving shopping cart: ${error.message}`
           });
-          console.log(error);
+          // console.log(error);
         }
       },
 
@@ -451,7 +451,7 @@ const UserController = {
                 res.redirect('/');
             }
         } catch( error ) {
-            console.log( error );
+            // console.log( error );
         }
     },
 
@@ -476,7 +476,7 @@ const UserController = {
             route: req.originalUrl,
             message: `Error during checkout: ${error.message}`
           });
-          console.log(error);
+          // console.log(error);
         }
       },
 
@@ -538,7 +538,7 @@ const UserController = {
                 return res.status(500).json({ message: itemResponse.message });
             }
         } catch( error ) {
-            console.log( "updateShoppingCartItemQuantity Error:", error );
+            // console.log( "updateShoppingCartItemQuantity Error:", error );
             res.status(500).json({ message: "Internal server error." });
         }
     },

@@ -54,7 +54,7 @@ class User {
                 return { status: 401, message: "Incorrect password.", username: user.username };
             }
         } catch( error ) {
-            console.log( "User Login Error: ", error );
+            //  console.log( "User Login Error: ", error );
             return { status: 500, message: "Internal server error." };
         }
     }
@@ -96,7 +96,7 @@ class User {
             return { status: 201, message: "Registration successful.", user: newUser };
 
         } catch( error ) {
-            console.log( "User Register Error: ", error );
+            //  console.log( "User Register Error: ", error );
             return { status: 500, message: "Internal server error." };
         }
     }
@@ -117,7 +117,7 @@ class User {
             const count = rows[0].count;
             return count > 0 ? true : false;    // Returns true if counter > 0
         } catch( error ) {
-            console.log( "Error: ", error );
+            //  console.log( "Error: ", error );
             return false;
         }
     }
@@ -130,7 +130,7 @@ class User {
             const count = rows[0].count;
             return count > 0 ? true : false;    // Returns true if counter > 0
         } catch( error ) {
-            console.log( "Error: ", error );
+            //  console.log( "Error: ", error );
             return false;
         }
     }
@@ -148,7 +148,7 @@ class User {
             const userID = user[0].userID;
             return { status: 200, userID: userID, message: "User was found." };
         } catch( error ) {
-            console.log( "getUserID Error: ", error );
+            //  console.log( "getUserID Error: ", error );
             return { status: 500, message: "Internal server error." };
         }
     }
@@ -239,7 +239,7 @@ class User {
         }
         catch( error )
         {
-            console.log(error);
+            //  console.log(error);
             return { status: 500, message: "Internal Server Error." }; 
         }
     }

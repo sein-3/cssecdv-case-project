@@ -20,7 +20,7 @@ class Product {
 
             return { status: 201, message: "Registration successful.", productID: productID };
         } catch( error ) {
-            console.log( "createProduct() Error: ", error );
+            // console.log( "createProduct() Error: ", error );
             return { status: 500, message: "Internal server error." };
         }
     }
@@ -35,7 +35,7 @@ class Product {
             await db.execute(sql, value);
             return { status: 201, message: "Product deletion was successful." }; 
         } catch( error ) {
-            console.log( "deletProduct() Error: ", error );
+            //  console.log( "deletProduct() Error: ", error );
             return { status: 500, message: "Internal server error." };
         }
     }
@@ -53,7 +53,7 @@ class Product {
             await db.execute(sql, values);
             return { status: 200, message: "Product was successfuly updated." };
         } catch( error ) {
-            console.log( "updateProduct() Error: ", error );
+            //  console.log( "updateProduct() Error: ", error );
             return { status: 500, message: "Internal server error." };
         }
     }
@@ -71,7 +71,7 @@ class Product {
           return { status: 200, message: "Product retrieved successfully.", productID: product.productID };
 
         } catch( error ) {
-            console.log( "getHighestProductID Error: " + error );
+            //  console.log( "getHighestProductID Error: " + error );
             return { status: 500, message: "Internal server error." };
         }
     }
@@ -135,7 +135,7 @@ class Product {
             return { status: 401, message: "Product retrieved by id", product: product };   
 
         } catch( error ) {
-            console.log( "getProductByID() Error: ", error );
+            //  console.log( "getProductByID() Error: ", error );
             return { status: 500, message: "Internal server error.", product: null };
         }
     }
@@ -166,7 +166,7 @@ class Product {
             return { status: 401, message: "Product retrieved by id", product: product };   
 
         } catch( error ) {
-            console.log( "getProductByID() Error: ", error );
+            //  console.log( "getProductByID() Error: ", error );
             return { status: 500, message: "Internal server error.", product: null };
         }
     }
@@ -188,7 +188,7 @@ class Product {
             const [categories, _] = await db.execute(sql);
             return { status: 201, message: "Categories retrieved successfully.", categories: categories };
         } catch( error ) {
-            console.log( "getBottomMostCategories() Error: ", error );
+            //  console.log( "getBottomMostCategories() Error: ", error );
             return { status: 500, message: "Internal server error.", categories: null };
         }
     }
@@ -209,7 +209,7 @@ class Product {
             }
 
         } catch( error ) {
-            console.log( "getBottomMostCategories() Error: ", error );
+            //  console.log( "getBottomMostCategories() Error: ", error );
             return { status: 500, message: "Internal server error.", categoryID: null };
         }
     }

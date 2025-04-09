@@ -16,7 +16,7 @@ class Wishlist {
                 return { status: 404, message: "Product is not wishlisted." };
             }
         } catch (error) {
-            console.log("checkWishlistStatus() Error:", error);
+            //  console.log("checkWishlistStatus() Error:", error);
             return { status: 500, message: "Internal server error: " + error.message };
         }
     }
@@ -31,7 +31,7 @@ class Wishlist {
             await db.execute(sql, [userID, productID]);
             return { status: 201, message: "Product added to wishlist." };
         } catch (error) {
-            console.log("addToWishlist() Error:", error);
+            //  console.log("addToWishlist() Error:", error);
             return { status: 500, message: "Internal server error: " + error.message };
         }
     }
@@ -46,7 +46,7 @@ class Wishlist {
             await db.execute(sql, [userID, productID]);
             return { status: 200, message: "Product removed from wishlist." };
         } catch (error) {
-            console.log("removeFromWishlist() Error:", error);
+            //  console.log("removeFromWishlist() Error:", error);
             return { status: 500, message: "Internal server error: " + error.message };
         }
     }
@@ -80,7 +80,7 @@ class Wishlist {
             const [rows] = await db.execute(sql, [userID]);
             return { status: 200, wishlist: rows };
         } catch (error) {
-            console.log("getWishlistedProductsByUserID Error:", error);
+            //  console.log("getWishlistedProductsByUserID Error:", error);
             return { status: 500, message: "Internal server error: " + error.message };
         }
     }

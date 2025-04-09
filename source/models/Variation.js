@@ -18,7 +18,7 @@ class Variation {
             await db.execute(sql, values);
             return { status: 201, message: "Registration successful." };
         } catch( error ) {
-            console.log( "createVariation() Error: ", error );
+            //  console.log( "createVariation() Error: ", error );
             return { status: 500, message: "Internal server error." };
         }
     }
@@ -38,7 +38,7 @@ class Variation {
             } return { status: 200, variations: rows };
 
         } catch( error ) {
-            console.log( "Image.js / getAllImagesOfProduct Error: ", error );
+            //  console.log( "Image.js / getAllImagesOfProduct Error: ", error );
             return { status: 500, message: "Internal server error.", variations: null };
         }
     }

@@ -53,7 +53,7 @@ const AdminController = {
                 route: req.originalUrl,
                 message: error.message
             });
-            console.log("AdminController.js - inventory() Error:", error);
+            // console.log("AdminController.js - inventory() Error:", error);
         }
     },
 
@@ -97,7 +97,7 @@ const AdminController = {
                 route: req.originalUrl,
                 message: error.message
             });
-            console.log("AdminController.js - viewProductAdmin() Error:", error);
+            // console.log("AdminController.js - viewProductAdmin() Error:", error);
         }
     },
 
@@ -141,7 +141,7 @@ const AdminController = {
                 route: req.originalUrl,
                 message: error.message
             });
-            console.log("AdminController.js - editProduct() Error:", error);
+            // console.log("AdminController.js - editProduct() Error:", error);
         }
     },
 
@@ -339,7 +339,7 @@ const AdminController = {
                 route: req.originalUrl,
                 message: `File upload failed: ${error.message}`
             });
-            console.log("Error: File upload failed", error);
+            // console.log("Error: File upload failed", error);
             res.status(500).send("File upload failed: " + error);
         }
     },
@@ -350,7 +350,7 @@ const AdminController = {
                 const { imageDetails } = req.body;
                 const errorMessages = [];
                 const uploadedImagesID = [];
-                console.log(imageDetails);
+                // console.log(imageDetails);
                 for (const imageDetail of imageDetails) {
                     const { userID, originalName, fileName, destination, filePath } = imageDetail;
                     const newDestination = destination.replace('/temporary', '/products');
@@ -406,7 +406,7 @@ const AdminController = {
                 route: req.originalUrl,
                 message: `File upload failed: ${error.message}`
             });
-            console.log("Error: File upload failed", error);
+            // console.log("Error: File upload failed", error);
             res.status(500).send("File upload failed: " + error);
         }
     },
@@ -459,7 +459,7 @@ const AdminController = {
                 route: req.originalUrl,
                 message: `Exception while creating product image: ${error.message}`
             });
-            console.log("Error: Create product image failed", error);
+            // console.log("Error: Create product image failed", error);
             res.status(500).send("Create product image error: " + error);
         }
     },
