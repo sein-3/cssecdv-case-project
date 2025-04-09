@@ -44,6 +44,11 @@ const loginPassword = document.getElementById("login-password");
 const loginButton = document.getElementById("login-button");
 const rememberBox = document.getElementById("remember-me");
 
+<<<<<<< Updated upstream
+=======
+const emailReg = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+>>>>>>> Stashed changes
 rememberBox.addEventListener('change', function() {
     if( this.checked ) {
         this.value = true;

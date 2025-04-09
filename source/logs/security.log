@@ -1,0 +1,7 @@
+2025-04-09T09:18:19.166Z | UserID: N/A | Action: Failed Login Attempt | Status: 401 | Route: /login | Message: Invalid credentials or user not found
+2025-04-09T09:18:30.905Z | UserID: N/A | Action: Failed Login Attempt | Status: 401 | Route: /login | Message: Invalid credentials or user not found
+2025-04-09T09:18:31.009Z | UserID: N/A | Action: Failed Login Attempt | Status: 401 | Route: /login | Message: Invalid credentials or user not found
+2025-04-09T09:18:31.117Z | UserID: N/A | Action: Failed Login Attempt | Status: 401 | Route: /login | Message: Invalid credentials or user not found
+2025-04-09T09:18:31.229Z | UserID: N/A | Action: Failed Login Attempt | Status: 401 | Route: /login | Message: Invalid credentials or user not found
+2025-04-09T09:24:09.227Z | UserID: N/A | Action: Logout | Status: 200 | Route: /logout | Message: User logged out successfully
+2025-04-09T09:24:31.368Z | UserID: 10000000 | Action: Successful Login | Status: 200 | Route: /login | Message: User choi logged in. Role: admin

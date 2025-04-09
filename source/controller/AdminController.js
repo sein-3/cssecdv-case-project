@@ -15,6 +15,7 @@ const fse = require('fs-extra');
 const Product = require('../models/Product.js');
 const Image = require('../models/Image.js');
 const Variation = require('../models/Variation.js');
+const Logger = require('../utils/logger.js');
 
 
 const AdminController = {
@@ -187,6 +188,11 @@ const AdminController = {
     },
 
     uploadImageReference: async (req, res) => {
+        /*
+            if( authorized) do action
+            else if( not authorized ) log action
+        */
+
         // if( req.session.authorized && req.session.userRole == 'admin' ) {
         try {
             if( req.body.imageDetails ) {
