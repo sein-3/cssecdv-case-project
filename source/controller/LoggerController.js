@@ -4,8 +4,8 @@ const path = require('path');
 const LoggerController = {
     viewLogs: (req, res) => {
         // Ensure the user is authenticated and has the adminlogger role (roleID === 4)
-        if( !req.session.authorized || !req.session.userRole == 'adminlogger' ) {
-            return res.status(403).send(`Access Denied. ${req.session.userRole}`);
+        if (!req.session.authorized || req.session.userRole !== 'adminlogger') {
+            return res.status(403).send(`Error 403`);
         }
 
         // Get requested date from query parameter (expected format: YYYY-MM-DD)

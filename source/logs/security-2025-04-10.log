@@ -1,0 +1,63 @@
+2025-04-10T14:22:50.698Z | UserID: N/A | Action: Logout | Status: 200 | Route: /logout | Message: User logged out successfully
+2025-04-10T14:24:10.157Z | UserID: N/A | Action: Registration Successful | Status: 201 | Route: /register | Message: User registered with email: customer.account@gmail.com
+2025-04-10T14:25:08.825Z | UserID: N/A | Action: Registration Successful | Status: 201 | Route: /register | Message: User registered with email: product.manager@gmail.com
+2025-04-10T14:25:35.581Z | UserID: N/A | Action: Registration Successful | Status: 201 | Route: /register | Message: User registered with email: admin.logger@gmail.com
+2025-04-10T14:27:37.929Z | UserID: 10000000 | Action: Successful Login | Status: 200 | Route: /login | Message: User CustomerAcc logged in. Role: customer
+2025-04-10T14:28:18.321Z | UserID: 10000000 | Action: Logout | Status: 200 | Route: /logout | Message: User logged out successfully
+2025-04-10T14:29:02.847Z | UserID: 10000000 | Action: Successful Login | Status: 200 | Route: /login | Message: User CustomerAcc logged in. Role: customer
+2025-04-10T14:31:33.966Z | UserID: 10000000 | Action: Logout | Status: 200 | Route: /logout | Message: User logged out successfully
+2025-04-10T14:32:12.266Z | UserID: N/A | Action: Registration Successful | Status: 201 | Route: /register | Message: User registered with email: choi@email.com
+2025-04-10T14:32:20.638Z | UserID: 10000003 | Action: Successful Login | Status: 200 | Route: /login | Message: User Choi logged in. Role: customer
+2025-04-10T14:33:08.852Z | UserID: N/A | Action: Logout | Status: 200 | Route: /logout | Message: User logged out successfully
+2025-04-10T14:33:18.807Z | UserID: 10000003 | Action: Successful Login | Status: 200 | Route: /login | Message: User Choi logged in. Role: customer
+2025-04-10T14:34:56.771Z | UserID: N/A | Action: Logout | Status: 200 | Route: /logout | Message: User logged out successfully
+2025-04-10T14:35:28.939Z | UserID: 10000003 | Action: Successful Login | Status: 200 | Route: /login | Message: User Choi logged in. Role: customer
+2025-04-10T14:37:14.565Z | UserID: 10000003 | Action: Successful Login | Status: 200 | Route: /login | Message: User Choi logged in. Role: customer
+2025-04-10T14:37:52.037Z | UserID: N/A | Action: Logout | Status: 200 | Route: /logout | Message: User logged out successfully
+2025-04-10T14:38:04.815Z | UserID: 10000002 | Action: Successful Login | Status: 200 | Route: /login | Message: User AdminLoggerAcc logged in. Role: adminlogger
+2025-04-10T14:38:36.824Z | UserID: N/A | Action: Logout | Status: 200 | Route: /logout | Message: User logged out successfully
+2025-04-10T14:38:41.891Z | UserID: 10000003 | Action: Successful Login | Status: 200 | Route: /login | Message: User Choi logged in. Role: customer
+2025-04-10T14:39:06.368Z | UserID: N/A | Action: Logout | Status: 200 | Route: /logout | Message: User logged out successfully
+2025-04-10T14:39:20.282Z | UserID: 10000001 | Action: Successful Login | Status: 200 | Route: /login | Message: User ProductManagerAcc logged in. Role: admin
+2025-04-10T14:39:20.300Z | UserID: 10000001 | Action: Access Inventory Page | Status: 200 | Route: /inventory | Message: Admin accessed inventory page successfully.
+2025-04-10T14:40:10.613Z | UserID: 10000001 | Action: Access Inventory Page | Status: 200 | Route: /inventory | Message: Admin accessed inventory page successfully.
+2025-04-10T14:40:15.637Z | UserID: 10000001 | Action: Access Register Product Page | Status: 200 | Route: /registerProduct | Message: Admin accessed register product page.
+2025-04-10T14:40:54.781Z | UserID: 10000001 | Action: Product Registration | Status: 201 | Route: /registerProduct | Message: Product created successfully. Product ID: 20000000
+2025-04-10T14:40:54.789Z | UserID: 10000001 | Action: Create Product Variations | Status: 201 | Route: /createProductVariations | Message: All variations created for product ID: 20000000
+2025-04-10T14:41:15.650Z | UserID: 10000003 | Action: Access Inventory Page Denied | Status: 403 | Route: /inventory | Message: Unauthorized admin inventory access attempt.
+2025-04-10T14:41:34.179Z | UserID: 10000001 | Action: Access Inventory Page | Status: 200 | Route: /inventory | Message: Admin accessed inventory page successfully.
+2025-04-10T14:41:38.006Z | UserID: 10000001 | Action: Access Register Product Page | Status: 200 | Route: /registerProduct | Message: Admin accessed register product page.
+2025-04-10T14:42:06.781Z | UserID: 10000001 | Action: Product Registration | Status: 201 | Route: /registerProduct | Message: Product created successfully. Product ID: 20000001
+2025-04-10T14:42:06.785Z | UserID: 10000001 | Action: Create Product Variations | Status: 201 | Route: /createProductVariations | Message: All variations created for product ID: 20000001
+2025-04-10T14:42:09.161Z | UserID: 10000001 | Action: Access Inventory Page | Status: 200 | Route: /inventory | Message: Admin accessed inventory page successfully.
+2025-04-10T14:42:10.558Z | UserID: 10000001 | Action: View Product Admin | Status: 200 | Route: /viewProductAdmin?productID=20000001 | Message: Admin viewed product details for product ID: 20000001
+2025-04-10T14:42:10.570Z | UserID: 10000001 | Action: View Product Admin | Status: 200 | Route: /viewProductAdmin?productID=20000001 | Message: Admin viewed product details for product ID: 20000001
+2025-04-10T14:45:17.487Z | UserID: 10000001 | Action: Logout | Status: 200 | Route: /logout | Message: User logged out successfully
+2025-04-10T14:46:12.341Z | UserID: N/A | Action: Logout | Status: 200 | Route: /logout | Message: User logged out successfully
+2025-04-10T14:46:29.137Z | UserID: N/A | Action: Logout | Status: 200 | Route: /logout | Message: User logged out successfully
+2025-04-10T14:48:36.073Z | UserID: 10000003 | Action: Successful Login | Status: 200 | Route: /login | Message: User Choi logged in. Role: customer
+2025-04-10T14:49:23.649Z | UserID: N/A | Action: Logout | Status: 200 | Route: /logout | Message: User logged out successfully
+2025-04-10T14:50:33.111Z | UserID: 10000003 | Action: Successful Login | Status: 200 | Route: /login | Message: User Choi logged in. Role: customer
+2025-04-10T14:50:55.189Z | UserID: N/A | Action: Logout | Status: 200 | Route: /logout | Message: User logged out successfully
+2025-04-10T14:51:01.588Z | UserID: N/A | Action: Logout | Status: 200 | Route: /logout | Message: User logged out successfully
+2025-04-10T14:51:37.532Z | UserID: N/A | Action: Logout | Status: 200 | Route: /logout | Message: User logged out successfully
+2025-04-10T14:51:54.252Z | UserID: 10000002 | Action: Successful Login | Status: 200 | Route: /login | Message: User AdminLoggerAcc logged in. Role: adminlogger
+2025-04-10T14:52:50.549Z | UserID: N/A | Action: Logout | Status: 200 | Route: /logout | Message: User logged out successfully
+2025-04-10T14:52:59.146Z | UserID: 10000003 | Action: Successful Login | Status: 200 | Route: /login | Message: User Choi logged in. Role: customer
+2025-04-10T14:54:20.970Z | UserID: 10000003 | Action: Successful Login | Status: 200 | Route: /login | Message: User Choi logged in. Role: customer
+2025-04-10T14:54:27.529Z | UserID: 10000003 | Action: Logout | Status: 200 | Route: /logout | Message: User logged out successfully
+2025-04-10T14:54:36.204Z | UserID: 10000003 | Action: Successful Login | Status: 200 | Route: /login | Message: User Choi logged in. Role: customer
+2025-04-10T14:54:48.835Z | UserID: 10000003 | Action: Logout | Status: 200 | Route: /logout | Message: User logged out successfully
+2025-04-10T14:55:05.611Z | UserID: 10000000 | Action: Successful Login | Status: 200 | Route: /login | Message: User CustomerAcc logged in. Role: customer
+2025-04-10T14:55:40.661Z | UserID: N/A | Action: Logout | Status: 200 | Route: /logout | Message: User logged out successfully
+2025-04-10T14:56:32.195Z | UserID: N/A | Action: Logout | Status: 200 | Route: /logout | Message: User logged out successfully
+2025-04-10T14:57:02.164Z | UserID: N/A | Action: Failed Login Attempt | Status: 404 | Route: /login | Message: Invalid credentials for user not found
+2025-04-10T14:57:15.552Z | UserID: 10000003 | Action: Successful Login | Status: 200 | Route: /login | Message: User Choi logged in. Role: customer
+2025-04-10T15:05:44.041Z | UserID: N/A | Action: Logout | Status: 200 | Route: /logout | Message: User logged out successfully
+2025-04-10T15:05:48.363Z | UserID: N/A | Action: Logout | Status: 200 | Route: /logout | Message: User logged out successfully
+2025-04-10T15:05:52.733Z | UserID: N/A | Action: Logout | Status: 200 | Route: /logout | Message: User logged out successfully
+2025-04-10T15:06:05.604Z | UserID: 10000003 | Action: Successful Login | Status: 200 | Route: /login | Message: User Choi logged in. Role: customer
+2025-04-10T15:09:14.912Z | UserID: N/A | Action: Logout | Status: 200 | Route: /logout | Message: User logged out successfully
+2025-04-10T15:09:19.658Z | UserID: 10000003 | Action: Successful Login | Status: 200 | Route: /login | Message: User Choi logged in. Role: customer
+2025-04-10T15:12:21.081Z | UserID: 10000003 | Action: Logout | Status: 200 | Route: /logout | Message: User logged out successfully
+2025-04-10T15:12:34.516Z | UserID: 10000002 | Action: Successful Login | Status: 200 | Route: /login | Message: User AdminLoggerAcc logged in. Role: adminlogger

@@ -427,7 +427,7 @@ const UserController = {
               res.status(404).render('users/shoppingCart.ejs', { shoppingCart });
             }
           } else {
-            res.redirect('/');
+            res.redirect('/login');
           }
         } catch (error) {
           logger.logSecurityEvent({
@@ -448,7 +448,7 @@ const UserController = {
                 const { wishlist } = await Wishlist.getUserWishlist( userID );
                 res.status(200).render('./users/wishlist.ejs', { wishlist: wishlist });
             } else {
-                res.redirect('/');
+                res.redirect('/login');
             }
         } catch( error ) {
             // console.log( error );
